@@ -1,10 +1,13 @@
-import { SlashCommandBuilder } from 'discord.js';
+const author = 'chematus';
 
 export default {
-  data: new SlashCommandBuilder()
-    .setName('ping')
-    .setDescription('Check if Baro is awake'),
+  data: {
+    name: 'ping',
+    description: 'Check if Baro is awake',
+  },
   async execute(interaction) {
-    await interaction.reply('Pong!');
+    const tag = interaction.user.tag.split('#')[0].toLowerCase();
+    const message = author === tag ? 'Hey, Dad!' : 'Pong';
+    await interaction.editReply(message);
   },
 };

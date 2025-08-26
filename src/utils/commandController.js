@@ -1,23 +1,34 @@
 import 'dotenv/config';
-import { REST, Routes } from 'discord.js';
+import {
+  REST,
+  Routes,
+  MessageFlags,
+} from 'discord.js';
+import { logger, reportError } from './logger.js';
 
 export const registerCommands = async (commandCollection) => {
+  if (!process.env.DISCORD_TOKEN || !process.env.APP_ID) {
+    logger.error('Missing required env variables');
+
+    return;
+  }
+
   const rest = new REST().setToken(process.env.DISCORD_TOKEN);
   const commands = [];
 
   commandCollection.each((command) => commands.push(command.data.toJSON()));
 
   try {
-    console.log(`Started refreshing ${commands.length} application commands.`);
+    logger.info(`Started refreshing ${commands.length} application commands.`);
 
     const data = await rest.put(
-      Routes.applicationCommands(process.env.APP_ID),
+      Routes.applicationGuildCommands(process.env.APP_ID, process.env.GUILD_ID),
       { body: commands },
     );
 
-    console.log(`Successfully reloaded ${data.length} application commands.`);
+    logger.info(`Successfully reloaded ${data.length} application commands.`);
   } catch (error) {
-    console.error(error);
+    reportError(error, { context: 'Command Registration' });
   }
 };
 
@@ -29,7 +40,8 @@ export const bindCommandHandler = async (interaction) => {
   const command = interaction.client.commands.get(interaction.commandName);
 
   if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
+    logger.warn(`No command matching "${interaction.commandName}" was found.`);
+    await interaction.reply({ content: `The command "${interaction.commandName}" does not exist.`, ephemeral: true });
 
     return;
   }
@@ -37,12 +49,18 @@ export const bindCommandHandler = async (interaction) => {
   try {
     await command.execute(interaction);
   } catch (error) {
-    console.error(error);
+    reportError(error, {
+      commandName: interaction.commandName,
+      user: interaction.user.tag,
+      guild: interaction.guild?.id,
+      channel: interaction.channel?.id,
+    });
 
+    const errorMessage = 'There was an error while executing this command!';
     if (interaction.replied || interaction.deferred) {
-      await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+      await interaction.followUp({ content: errorMessage, flags: MessageFlags.Ephemeral });
     } else {
-      await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+      await interaction.reply({ content: errorMessage, flags: MessageFlags.Ephemeral });
     }
   }
 };
