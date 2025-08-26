@@ -7,7 +7,7 @@ export default {
   },
   async execute(interaction) {
     const tag = interaction.user.tag.split('#')[0].toLowerCase();
-    const message = author === tag ? 'Hey, Dad!' : 'Pong';
+    const message = author === tag ? 'Hey, Dad! :pleading_face:' : 'Pong';
     await interaction.editReply(message);
   },
 };

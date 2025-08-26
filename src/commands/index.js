@@ -6,8 +6,8 @@ import { logger } from '../utils/logger.js';
 const commandList = {};
 export const commandCollection = new Collection();
 
-commandList['utility'] = utility;
 commandList['warframe'] = warframe;
+commandList['utility'] = utility;
 
 Object.entries(commandList).forEach(([key, command]) => {
   if ('data' in command && 'execute' in command) {

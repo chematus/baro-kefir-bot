@@ -1,14 +1,12 @@
 import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
 import { getCycleData, owZoneList } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
-import { capitalizeString } from '../../utils/common.js';
+import { capitalizeString, timestampToUnix } from '../../utils/common.js';
 
 const BORDER_COLOR = {
   DAY: '#FFD700',
   NIGHT: '#4B0082',
 };
-
-const formatTime = (timestamp) => Math.floor(new Date(timestamp) / 1000);
 
 const parseEarthData = ({ expiry, isDay }) => {
   if (!expiry || typeof isDay !== 'boolean') {
@@ -16,7 +14,7 @@ const parseEarthData = ({ expiry, isDay }) => {
   }
 
   return {
-    changeTimestamp: formatTime(expiry),
+    changeTimestamp: timestampToUnix(expiry),
     isDay,
     cycleState: isDay ? 'day' : 'night',
   };
@@ -28,7 +26,7 @@ const parseCetusData = ({ expiry, isDay, state }) => {
   }
 
   return {
-    changeTimestamp: formatTime(expiry),
+    changeTimestamp: timestampToUnix(expiry),
     isDay,
     cycleState: state || isDay ? 'day' : 'night',
   };
@@ -40,7 +38,7 @@ const parseCambionData = ({ expiry, state }) => {
   }
 
   return {
-    changeTimestamp: formatTime(expiry),
+    changeTimestamp: timestampToUnix(expiry),
     isDay: state === 'fass',
     cycleState: state,
   };
@@ -52,7 +50,7 @@ const parseVallisData = ({ expiry, isWarm }) => {
   }
 
   return {
-    changeTimestamp: formatTime(expiry),
+    changeTimestamp: timestampToUnix(expiry),
     isDay: isWarm,
     cycleState: isWarm ? 'warm' : 'cold',
   };
@@ -64,12 +62,12 @@ export default {
     description: 'Retrieve current cycle for selected zone',
   },
   options: (option) =>
-    option.setName('cycle')
+    option.setName('zone')
       .setDescription('Choose location')
       .setRequired(true)
       .addChoices(owZoneList),
   async execute(interaction) {
-    const zone = interaction.options.getString('cycle');
+    const zone = interaction.options.getString('zone');
     const zoneName = owZoneList.find(({ value }) => value === zone).name;
     const cycleData = await getCycleData(zone);
 
@@ -117,6 +115,6 @@ export default {
       .setTimestamp()
       .setFooter({ text: 'Data from warframestat.us' });
 
-    await interaction.editReply({ embeds: [embed], files: [icon] });
+    return interaction.editReply({ embeds: [embed], files: [icon] });
   },
 };
