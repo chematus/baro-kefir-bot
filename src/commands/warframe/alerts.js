@@ -1,7 +1,7 @@
 import { EmbedBuilder } from 'discord.js';
 import { getAlertsData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
-import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
+import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
 export default {
   data: {
@@ -24,12 +24,11 @@ export default {
       .setTitle(m.reward.itemString)
       .setThumbnail(m.reward.setThumbnail)
       .addFields(
-        { name: 'Ends', value: `<t:${timestampToUnix(expiry)}:R>`, inline: true },
-        { name: m.node, value: m.type, inline: true },
-        { name: m.faction, value: `${m.minEnemyLevel}-${m.maxEnemyLevel}`, inline: true },
+        { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
+        { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
       )
       .setTimestamp()
-      .setFooter({ text: 'Data from warframestat.us' }));
+      .setFooter({ text: 'warframestat.us' }));
 
     if (embeds && embeds.length) {
       return interaction.editReply({ embeds });

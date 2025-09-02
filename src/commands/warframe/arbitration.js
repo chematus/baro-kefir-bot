@@ -36,14 +36,13 @@ export default {
 
     const embed = new EmbedBuilder()
       .setColor(getRandomHexColor())
-      .setTitle(`${node} - ${type}`)
+      .setTitle(`${node} | ${type} | ${enemy}`)
       .setThumbnail(`attachment://${THUMBNAIL}`)
       .addFields(
-        { name: 'Ends', value: `<t:${timestampToUnix(expiry)}:R>` },
-        { name: enemy, value: '60-80' },
+        { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
       )
       .setTimestamp()
-      .setFooter({ text: 'Data from warframestat.us' });
+      .setFooter({ text: 'warframestat.us' });
 
     return interaction.editReply({ embeds: [embed], files: [icon] });
   },

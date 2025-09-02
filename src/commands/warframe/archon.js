@@ -42,11 +42,11 @@ export default {
       .setThumbnail(`attachment://${bossKey}.png`)
       .addFields(
         { name: 'Reward', value: `${capitalizeString(reward)} Archon Shard` },
-        { name: 'Ends', value: `<t:${timestampToUnix(expiry)}:R>` },
+        { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
         ...missionList,
       )
       .setTimestamp()
-      .setFooter({ text: 'Data from warframestat.us' });
+      .setFooter({ text: 'warframestat.us' });
 
     return interaction.editReply({ embeds: [embed], files: [icon] });
   },

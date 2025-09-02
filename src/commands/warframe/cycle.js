@@ -110,10 +110,10 @@ export default {
       .setTitle(`${zoneName} Cycle: ${capitalizeString(cycleState)}`)
       .setThumbnail(`attachment://cycle-${fileName}.png`)
       .addFields(
-        { name: 'Ends', value: `<t:${changeTimestamp}:R>`, inline: true },
+        { name: `Ends <t:${changeTimestamp}:R>`, value: '' },
       )
       .setTimestamp()
-      .setFooter({ text: 'Data from warframestat.us' });
+      .setFooter({ text: 'warframestat.us' });
 
     return interaction.editReply({ embeds: [embed], files: [icon] });
   },
