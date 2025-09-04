@@ -1,4 +1,4 @@
-import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
+import { EmbedBuilder, AttachmentBuilder, MessageFlags } from 'discord.js';
 import { getFissuresData, fissureTypeList } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { capitalizeString, DELIMITER, timestampToUnix } from '../../utils/common.js';
@@ -50,6 +50,6 @@ export default {
         .setFooter({ text: 'warframestat.us' });
     });
 
-    return interaction.editReply({ embeds, files: icons });
+    return interaction.editReply({ embeds, files: icons, flags: MessageFlags.Ephemeral });
   },
 };

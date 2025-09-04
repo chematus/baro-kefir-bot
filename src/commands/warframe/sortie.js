@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { getSortieData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
@@ -35,6 +35,6 @@ export default {
         { name: variant.modifier, value: variant.modifierDescription })
       .setFooter({ text: 'warframestat.us' })));
 
-    await interaction.editReply({ embeds });
+    await interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },
 };

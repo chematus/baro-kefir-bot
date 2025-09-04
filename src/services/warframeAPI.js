@@ -85,10 +85,10 @@ const apiClient = axios.create({
   },
 });
 
-const fetchData = async (endpoint, context) => {
+const fetchData = async (endpoint, context, platform = 'pc') => {
   try {
     logger.debug(`Fetching Warframe ${context}...`);
-    const response = await apiClient.get(endpoint);
+    const response = await apiClient.get(`${platform ? `${platform}/` : ''}${endpoint}`);
 
     return response.data;
   } catch (error) {
@@ -111,4 +111,4 @@ export const getNewsData = () => fetchData('news', 'news data');
 export const getNightwaveData = () => fetchData('nightwave', 'nightwave data');
 export const getSortieData = () => fetchData('sortie', 'sortie data');
 export const getVoidTraderData = () => fetchData('voidTrader', 'void trader data');
-export const getItemData = (itemName) => fetchData(`items/${encodeURI(itemName)}`, `${itemName} item data`);
+export const getItemData = (itemName) => fetchData(`items/${encodeURI(itemName)}`, `${itemName} item data`, null);

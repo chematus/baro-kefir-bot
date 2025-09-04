@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { getDailyDealsData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
@@ -30,6 +30,6 @@ export default {
       .setTimestamp()
       .setFooter({ text: 'warframestat.us' }));
 
-    return interaction.editReply({ embeds });
+    return interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },
 };

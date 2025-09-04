@@ -1,7 +1,8 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { getVoidTraderData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
+import { createVoidTraderEmbed } from '../../utils/embed.js';
 
 
 export default {
@@ -31,29 +32,8 @@ export default {
       return interaction.editReply({ embeds: [embed] });
     }
 
-    const embeds = [
-      new EmbedBuilder()
-        .setColor(getRandomHexColor())
-        .setTitle(voidTraderData.character)
-        .setDescription(`has arrived at ${voidTraderData.location}`)
-        .addFields(
-          { name: `Departs <t:${timestampToUnix(voidTraderData.activation)}:R>`, value: '' },
-        )
-        .setTimestamp()
-        .setFooter({ text: 'warframestat.us' }),
-      new EmbedBuilder()
-        .setColor(getRandomHexColor())
-        .setTitle('Inventory')
-        .addFields(
-          ...voidTraderData.inventory.map(({ item, ducats, credits }) => ({
-            name: item,
-            value: `${ducats} :coin: + ${credits} :euro:`,
-          })),
-        )
-        .setTimestamp()
-        .setFooter({ text: 'warframestat.us' }),
-    ];
+    const embeds = createVoidTraderEmbed(voidTraderData);
 
-    return interaction.editReply({ embeds });
+    return interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },
 };

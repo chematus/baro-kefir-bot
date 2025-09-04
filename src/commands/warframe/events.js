@@ -1,7 +1,7 @@
-import { EmbedBuilder } from 'discord.js';
 import { getEventsData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
-import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
+import { createEventEmbed } from '../../utils/embed.js';
+import { MessageFlags } from 'discord.js';
 
 export default {
   data: {
@@ -19,22 +19,12 @@ export default {
 
     logger.info(`User ${interaction.user.tag} requested the events data.`);
 
-    const embeds = eventsData.map((e) => new EmbedBuilder()
-      .setColor(getRandomHexColor())
-      .setTitle(e.description)
-      .addFields(
-        { name: e.tooltip || '', value: e.node || '' },
-        ...e.interimSteps.map(({ goal, reward: { asString } }) => ({ name: `@${goal}`, value: asString })),
-        { name: `@${e.maximumScore}`, value: e.rewards.map(({ asString }) => asString).filter((s) => s.length).join('\n') },
-        { name: `Ends <t:${timestampToUnix(e.expiry)}:R>`, value: '' },
-      )
-      .setTimestamp()
-      .setFooter({ text: 'warframestat.us' }));
+    const embeds = eventsData.map(createEventEmbed);
 
-    if (embeds && embeds.length) {
-      return interaction.editReply({ embeds });
+    if (embeds?.length) {
+      return interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
     }
 
-    return interaction.editReply('No active events found :confused:');
+    return interaction.editReply({ content: 'No active events found :confused:', flags: MessageFlags.Ephemeral });
   },
 };

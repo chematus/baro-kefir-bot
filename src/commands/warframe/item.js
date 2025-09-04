@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { getItemData, polarities, damageTypeList } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { getRandomHexColor, formatDuration, DELIMITER } from '../../utils/common.js';
@@ -393,7 +393,6 @@ export default {
       embeds[0].setDescription(itemData.description);
     } else if (itemData.levelStats?.length) {
       const desc = itemData.levelStats.at(-1).stats.join('\n');
-      console.log(desc);
       embeds[0].setDescription(replacePlaceholders(desc));
     }
 
@@ -464,6 +463,6 @@ export default {
         .addFields(...miscFields));
     }
 
-    return interaction.editReply({ embeds });
+    return interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },
 };

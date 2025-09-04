@@ -1,4 +1,4 @@
-import { EmbedBuilder } from 'discord.js';
+import { EmbedBuilder, MessageFlags } from 'discord.js';
 import { getNightwaveData, nightwaveChallengeType } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
@@ -67,6 +67,6 @@ export default {
         { name: `Ends <t:${timestampToUnix(challengeList[challenge.tier][0].expiry)}:R>`, value: '' })
       .setFooter({ text: 'warframestat.us' })));
 
-    await interaction.editReply({ embeds });
+    await interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },
 };

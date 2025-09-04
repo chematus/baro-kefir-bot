@@ -1,4 +1,4 @@
-import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
+import { EmbedBuilder, AttachmentBuilder, MessageFlags } from 'discord.js';
 import { getCycleData, owZoneList } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { capitalizeString, timestampToUnix } from '../../utils/common.js';
@@ -115,6 +115,6 @@ export default {
       .setTimestamp()
       .setFooter({ text: 'warframestat.us' });
 
-    return interaction.editReply({ embeds: [embed], files: [icon] });
+    return interaction.editReply({ embeds: [embed], files: [icon], flags: MessageFlags.Ephemeral });
   },
 };

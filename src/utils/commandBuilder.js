@@ -1,4 +1,4 @@
-import { SlashCommandBuilder, Collection } from 'discord.js';
+import { SlashCommandBuilder, Collection, MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 
 export const buildSlashCommand = (name, description, moduleList) => {
@@ -43,7 +43,7 @@ export const buildSlashCommand = (name, description, moduleList) => {
         return;
       }
 
-      await interaction.deferReply();
+      await interaction.deferReply({ flags: MessageFlags.Ephemeral });
       await subcommand.execute(interaction);
     },
   };

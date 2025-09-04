@@ -1,7 +1,7 @@
-import { EmbedBuilder } from 'discord.js';
 import { getAlertsData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
-import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
+import { createAlertEmbed } from '../../utils/embed.js';
+import { MessageFlags } from 'discord.js';
 
 export default {
   data: {
@@ -19,21 +19,16 @@ export default {
 
     logger.info(`User ${interaction.user.tag} requested the alerts data.`);
 
-    const embeds = alertsData.map(({ expiry, mission: m }) => new EmbedBuilder()
-      .setColor(getRandomHexColor())
-      .setTitle(m.reward.itemString)
-      .setThumbnail(m.reward.setThumbnail)
-      .addFields(
-        { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
-        { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
-      )
-      .setTimestamp()
-      .setFooter({ text: 'warframestat.us' }));
-
-    if (embeds && embeds.length) {
-      return interaction.editReply({ embeds });
+    if (!alertsData?.length) {
+      return interaction.editReply('No active alerts found :confused:');
     }
 
-    return interaction.editReply('No active alerts found :confused:');
+    const embeds = alertsData.map(createAlertEmbed);
+
+    if (embeds?.length) {
+      return interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
+    }
+
+    return interaction.editReply({ content: 'No active alerts found :confused:', flags: MessageFlags.Ephemeral });
   },
 };

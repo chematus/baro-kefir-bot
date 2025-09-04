@@ -1,4 +1,4 @@
-import { EmbedBuilder, AttachmentBuilder } from 'discord.js';
+import { EmbedBuilder, AttachmentBuilder, MessageFlags } from 'discord.js';
 import { getArchimedeaData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
@@ -47,6 +47,6 @@ export default {
         ...riskVariables.map(({ name, description: value }) => ({ name, value })),
       )));
 
-    return interaction.editReply({ embeds, files: [icon] });
+    return interaction.editReply({ embeds, files: [icon], flags: MessageFlags.Ephemeral });
   },
 };
