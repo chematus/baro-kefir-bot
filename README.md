@@ -1,6 +1,6 @@
 # Warframe Event Notifier Bot
 
-A lightweight and efficient Discord bot designed to monitor and announce in-game events for Warframe. It periodically fetches data from the `tenno.tools` API and notifies a designated channel of new alerts, invasions, and other time-sensitive activities, ensuring you and your squad never miss an opportunity.
+A lightweight and efficient Discord bot designed to monitor and announce in-game events for Warframe. It periodically fetches data from the `warframestat.us` API and notifies a designated channel of new alerts, invasions, and other time-sensitive activities, ensuring you and your squad never miss an opportunity.
 
 ## Features
 

@@ -79,9 +79,6 @@ const filterInvasions = ({ attacker, defender }) => {
 const FILTER = {
   [NOTIFICATION_TYPE.ALERT]: filterAlerts,
   [NOTIFICATION_TYPE.INVASION]: filterInvasions,
-  [NOTIFICATION_TYPE.NEWS]: () => true,
-  [NOTIFICATION_TYPE.EVENT]: () => true,
-  [NOTIFICATION_TYPE.BARO]: () => true,
 };
 
 /**
@@ -133,7 +130,11 @@ const checkByType = async (type) => {
     return;
   }
 
-  const itemList = (await FETCHER[type]()).filter(FILTER[type]);
+  let itemList = await FETCHER[type]();
+
+  if (Array.isArray(itemList) && FILTER[type]) {
+    itemList = itemList.filter(FILTER[type]);
+  }
 
   if (!itemList?.length) {
     return;
