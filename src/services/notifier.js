@@ -132,6 +132,10 @@ const checkByType = async (type) => {
 
   let itemList = await FETCHER[type]();
 
+  if (type === NOTIFICATION_TYPE.BARO && !itemList.inventory?.length) {
+    return;
+  }
+
   if (Array.isArray(itemList) && FILTER[type]) {
     itemList = itemList.filter(FILTER[type]);
   }

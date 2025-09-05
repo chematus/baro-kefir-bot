@@ -42,13 +42,6 @@ Follow these steps to get a local instance of the bot running.
 
 The `.env` file contains all necessary configuration for the bot.
 
-```ini
-# .env
-
-# Your private Discord Bot Token from the Discord Developer Portal
-DISCORD_TOKEN=YourSecretTokenGoesHere
-```
-
 ## Usage
 Once the dependencies are installed and the configuration is set, you can run the bot.
 

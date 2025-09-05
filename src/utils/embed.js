@@ -1,5 +1,6 @@
 import { EmbedBuilder } from 'discord.js';
 import {
+  chunkArray,
   DELIMITER,
   etaToUnix,
   getRandomHexColor,
@@ -106,25 +107,43 @@ export const createNewsEmbed = (item) => {
   return embed;
 };
 
-export const createVoidTraderEmbed = (voidTraderData) => [
-  new EmbedBuilder()
+export const createVoidTraderEmbed = (voidTraderData) => {
+  const embeds = [new EmbedBuilder()
     .setColor(getRandomHexColor())
     .setTitle(voidTraderData.character)
     .setDescription(`has arrived at ${voidTraderData.location}`)
     .addFields(
-      { name: `Departs <t:${timestampToUnix(voidTraderData.activation)}:R>`, value: '' },
+      { name: `Departs <t:${timestampToUnix(voidTraderData.expiry)}:R>`, value: '' },
     )
     .setTimestamp()
-    .setFooter({ text: 'warframestat.us' }),
-  new EmbedBuilder()
+    .setFooter({ text: 'warframestat.us' })];
+
+  const inventory = chunkArray(voidTraderData.inventory);
+
+  embeds.push(new EmbedBuilder()
     .setColor(getRandomHexColor())
     .setTitle('Inventory')
     .addFields(
-      ...voidTraderData.inventory.map(({ item, ducats, credits }) => ({
+      ...inventory[0].map(({ item, ducats, credits }) => ({
         name: item,
         value: `${ducats} :coin: + ${credits} :euro:`,
       })),
     )
     .setTimestamp()
-    .setFooter({ text: 'warframestat.us' }),
-];
+    .setFooter({ text: 'warframestat.us' }));
+
+  for (let i = 1; i < inventory.length; i++) {
+    embeds.push(new EmbedBuilder()
+      .setColor(getRandomHexColor())
+      .addFields(
+        ...inventory[i].map(({ item, ducats, credits }) => ({
+          name: item,
+          value: `${ducats} :coin: + ${credits} :euro:`,
+        })),
+      )
+      .setTimestamp()
+      .setFooter({ text: 'warframestat.us' }));
+  }
+
+  return embeds;
+};
