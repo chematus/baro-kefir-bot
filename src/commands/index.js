@@ -3,6 +3,8 @@ import utility from './utility.js';
 import warframe from './warframe.js';
 import { logger } from '../utils/logger.js';
 
+// Collection of all commands
+
 const commandList = {};
 export const commandCollection = new Collection();
 

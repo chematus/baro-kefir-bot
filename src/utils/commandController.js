@@ -6,6 +6,11 @@ import {
 } from 'discord.js';
 import { logger, reportError } from './logger.js';
 
+/**
+ * Register commands with Discord API.
+ *
+ * @param {Collection} commandCollection - The collection of commands to register.
+ */
 export const registerCommands = async (commandCollection) => {
   if (!process.env.DISCORD_TOKEN || !process.env.APP_ID) {
     logger.error('Missing required env variables');
@@ -32,6 +37,11 @@ export const registerCommands = async (commandCollection) => {
   }
 };
 
+/**
+ * Bind the command handler to the interaction event.
+ *
+ * @param {import('discord.js').CommandInteraction} interaction - The interaction object from Discord.js.
+ */
 export const bindCommandHandler = async (interaction) => {
   if (!interaction.isChatInputCommand()) {
     return;

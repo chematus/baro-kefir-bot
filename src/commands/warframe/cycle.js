@@ -8,6 +8,9 @@ const BORDER_COLOR = {
   NIGHT: '#4B0082',
 };
 
+/**
+ * Parse Earth data for the cycle command.
+ */
 const parseEarthData = ({ expiry, isDay }) => {
   if (!expiry || typeof isDay !== 'boolean') {
     return null;
@@ -20,6 +23,9 @@ const parseEarthData = ({ expiry, isDay }) => {
   };
 };
 
+/**
+ * Parse Cetus data for the cycle command.
+ */
 const parseCetusData = ({ expiry, isDay, state }) => {
   if (!expiry || typeof isDay !== 'boolean') {
     return null;
@@ -32,6 +38,9 @@ const parseCetusData = ({ expiry, isDay, state }) => {
   };
 };
 
+/**
+ * Parse Cambion Drift data for the cycle command.
+ */
 const parseCambionData = ({ expiry, state }) => {
   if (!expiry || !state) {
     return null;
@@ -44,6 +53,9 @@ const parseCambionData = ({ expiry, state }) => {
   };
 };
 
+/**
+ * Parse Vallis data for the cycle command.
+ */
 const parseVallisData = ({ expiry, isWarm }) => {
   if (!expiry || typeof isWarm !== 'boolean') {
     return null;
@@ -56,6 +68,9 @@ const parseVallisData = ({ expiry, isWarm }) => {
   };
 };
 
+/**
+ * Cycle command to retrieve current cycle for selected zone.
+ */
 export default {
   data: {
     name: 'cycle',

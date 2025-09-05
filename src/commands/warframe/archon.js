@@ -3,6 +3,9 @@ import { getArchonData, archonList } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { capitalizeString, timestampToUnix } from '../../utils/common.js';
 
+/**
+ * Archon command to retrieve the list of active Archon Hunt missions.
+ */
 export default {
   data: {
     name: 'archon',

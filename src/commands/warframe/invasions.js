@@ -4,6 +4,9 @@ import { chunkArray } from '../../utils/common.js';
 import { createInvasionEmbed } from '../../utils/embed.js';
 import { MessageFlags } from 'discord.js';
 
+/**
+ * Invasions command to retrieve the list of invasions.
+ */
 export default {
   data: {
     name: 'invasions',

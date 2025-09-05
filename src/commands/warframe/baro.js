@@ -4,7 +4,9 @@ import { logger } from '../../utils/logger.js';
 import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 import { createVoidTraderEmbed } from '../../utils/embed.js';
 
-
+/**
+ * Baro command to retrieve the Void Trader info.
+ */
 export default {
   data: {
     name: 'baro',

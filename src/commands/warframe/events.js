@@ -3,6 +3,9 @@ import { logger } from '../../utils/logger.js';
 import { createEventEmbed } from '../../utils/embed.js';
 import { MessageFlags } from 'discord.js';
 
+/**
+ * Events command to retrieve the list of events.
+ */
 export default {
   data: {
     name: 'events',

@@ -8,6 +8,7 @@ import {
 } from './common.js';
 import { priorityRewardList } from '../services/warframeAPI.js';
 
+// Create embed for alert data
 export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
   .setColor(getRandomHexColor())
   .setTitle(m.reward.itemString)
@@ -19,6 +20,7 @@ export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
   .setTimestamp()
   .setFooter({ text: 'warframestat.us' });
 
+// Create embed for event data
 export const createEventEmbed = (e) => new EmbedBuilder()
   .setColor(getRandomHexColor())
   .setTitle(e.description)
@@ -31,6 +33,7 @@ export const createEventEmbed = (e) => new EmbedBuilder()
   .setTimestamp()
   .setFooter({ text: 'warframestat.us' });
 
+// Create embed for invasion data
 export const createInvasionEmbed = (inv) => {
   let attackerReward = '';
 
@@ -91,6 +94,7 @@ export const createInvasionEmbed = (inv) => {
     .setFooter({ text: 'warframestat.us' });
 };
 
+// Create embed for news item
 export const createNewsEmbed = (item) => {
   const embed = new EmbedBuilder()
     .setColor(getRandomHexColor())
@@ -107,6 +111,7 @@ export const createNewsEmbed = (item) => {
   return embed;
 };
 
+// Create embeds for void trader data
 export const createVoidTraderEmbed = (voidTraderData) => {
   const embeds = [new EmbedBuilder()
     .setColor(getRandomHexColor())

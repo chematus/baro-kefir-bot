@@ -1,6 +1,14 @@
 import { SlashCommandBuilder, Collection, MessageFlags } from 'discord.js';
 import { logger } from '../utils/logger.js';
 
+/**
+ * Build a slash command with subcommands from a list of modules.
+ *
+ * @param {string} name - The name of the main command.
+ * @param {string} description - The description of the main command.
+ * @param {Array} moduleList - The list of module objects containing command data.
+ * @returns {{ data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void> }} - The built command and its execution logic.
+ */
 export const buildSlashCommand = (name, description, moduleList) => {
   const subcommands = new Collection();
 

@@ -4,6 +4,9 @@ import { chunkArray } from '../../utils/common.js';
 import { createNewsEmbed } from '../../utils/embed.js';
 import { MessageFlags } from 'discord.js';
 
+/**
+ * News command to retrieve the list of news.
+ */
 export default {
   data: {
     name: 'news',

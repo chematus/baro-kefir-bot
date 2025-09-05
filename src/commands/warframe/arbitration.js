@@ -5,6 +5,9 @@ import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
 const THUMBNAIL = 'vitus-essence.png';
 
+/**
+ * Arbitration command to retrieve the current arbitration mission.
+ */
 export default {
   data: {
     name: 'arbitration',

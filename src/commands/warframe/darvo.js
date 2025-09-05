@@ -3,6 +3,9 @@ import { getDailyDealsData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
+/**
+ * Darvo command to retrieve the list of daily deals.
+ */
 export default {
   data: {
     name: 'darvo',

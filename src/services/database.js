@@ -16,12 +16,12 @@ const setupDatabase = () => {
 };
 
 /**
- * Checks if an item has already been posted and recorded in the database
+ * Checks if an item has already been posted and recorded in the database.
  *
- * @param {string} id - The unique ID of the item from the API
- * @param {string} type - The category of the item (e.g., 'alert', 'invasion')
+ * @param {string} id - The unique ID of the item from the API.
+ * @param {string} type - The category of the item (e.g., 'alert', 'invasion').
  *
- * @returns {boolean} - True if the item exists in the database, false otherwise or in case of failure
+ * @returns {boolean} - True if the item exists in the database, false otherwise or in case of failure.
  */
 export const isItemPosted = (id, type) => {
   const stmt = db.prepare('SELECT id FROM posted_items WHERE id = ? AND type = ?');
@@ -36,11 +36,11 @@ export const isItemPosted = (id, type) => {
 };
 
 /**
- * Fetches all posted item IDs for a specific type
+ * Fetches all posted item IDs for a specific type.
  *
- * @param {string} type - The category of items to fetch
+ * @param {string} type - The category of items to fetch.
  *
- * @returns {Set<string>|null} - A Set containing all the posted IDs for that type, or null on failure
+ * @returns {Set<string>|null} - A Set containing all the posted IDs for that type, or null on failure.
  */
 export const getPostedIdsByType = (type) => {
   const stmt = db.prepare('SELECT id FROM posted_items WHERE type = ?');
@@ -56,11 +56,11 @@ export const getPostedIdsByType = (type) => {
 };
 
 /**
- * Records a new item in the database to mark it as posted
- * @param {string[]} ids - The unique IDs of the items
- * @param {string} type - The category of the item
+ * Records a new item in the database to mark it as posted.
+ * @param {string[]} ids - The unique IDs of the items.
+ * @param {string} type - The category of the item.
  *
- * @returns {{changes: number}|null} - An object with the total number of rows changed, or null on failure
+ * @returns {{changes: number}|null} - An object with the total number of rows changed, or null on failure.
  */
 export const markItemsAsPosted = (ids, type) => {
   if (!ids?.length) {

@@ -23,6 +23,7 @@ const ONE_HOUR_MS = 60 * 60 * 1000;
 let clientInstance = null;
 let notificationChannel = null;
 
+// Define notification types
 const NOTIFICATION_TYPE = {
   ALERT: 'alert',
   INVASION: 'invasion',
@@ -31,6 +32,7 @@ const NOTIFICATION_TYPE = {
   BARO: 'baro',
 };
 
+// Predefined messages for each notification type
 const NOTIFICATION_MESSAGE = {
   [NOTIFICATION_TYPE.ALERT]: 'New Alerts:',
   [NOTIFICATION_TYPE.INVASION]: 'Invasions with priority rewards:',
@@ -39,6 +41,7 @@ const NOTIFICATION_MESSAGE = {
   [NOTIFICATION_TYPE.BARO]: 'Baro has just arrived!',
 };
 
+// Maps notification types to their corresponding data fetching functions
 const FETCHER = {
   [NOTIFICATION_TYPE.ALERT]: getAlertsData,
   [NOTIFICATION_TYPE.INVASION]: getInvasionsData,
@@ -47,6 +50,7 @@ const FETCHER = {
   [NOTIFICATION_TYPE.BARO]: getVoidTraderData,
 };
 
+// Maps notification types to their corresponding embed creation functions
 const EMBED_BUILDER = {
   [NOTIFICATION_TYPE.ALERT]: createAlertEmbed,
   [NOTIFICATION_TYPE.INVASION]: createInvasionEmbed,
@@ -55,8 +59,20 @@ const EMBED_BUILDER = {
   [NOTIFICATION_TYPE.BARO]: createVoidTraderEmbed,
 };
 
+/**
+ * Filters alerts based on their expiration status.
+ *
+ * @param {Object} data - The alert data.
+ * @returns {boolean} - True if the alert matches the filter, false otherwise.
+ */
 const filterAlerts = ({ expired }) => !expired;
 
+/**
+ * Filters invasions based on their rewards.
+ *
+ * @param {Object} param0 - The invasion data.
+ * @returns {boolean} - True if the invasion matches the filter, false otherwise.
+ */
 const filterInvasions = ({ attacker, defender }) => {
   const filterRewards = (({ key, type }) => priorityRewardList
     .some((item) => key.toLowerCase().includes(item) || type.toLowerCase().includes(item)));
@@ -119,6 +135,12 @@ const getNotificationChannel = async () => {
   }
 };
 
+/**
+ * Checks for new notifications of a specific type.
+ *
+ * @param {string} type - The type of notification to check (e.g., 'alert', 'invasion', 'news', 'event', 'baro')
+ * @returns {Promise<void>}
+ */
 const checkByType = async (type) => {
   if (type === NOTIFICATION_TYPE.BARO) {
     const today = new Date();
@@ -135,6 +157,10 @@ const checkByType = async (type) => {
   }
 
   let itemList = await FETCHER[type]();
+
+  if (!result) {
+    return;
+  }
 
   if (type === NOTIFICATION_TYPE.BARO && !itemList.inventory?.length) {
     return;

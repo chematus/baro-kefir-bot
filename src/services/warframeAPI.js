@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { logger, reportError } from '../utils/logger.js';
 
+// Mapping of open world zones for cycle command
 export const owZoneList = [
   { name: 'Cetus', value: 'cetus' },
   { name: 'Vallis', value: 'vallis' },
@@ -8,12 +9,14 @@ export const owZoneList = [
   { name: 'Earth', value: 'earth' },
 ];
 
+// Mapping of archon hunt names to their reward colors
 export const archonList = [
   { name: 'amar', reward: 'crimson', color: '#DC143C' },
   { name: 'nira', reward: 'amber', color: '#FFBF00' },
   { name: 'boreal', reward: 'azure', color: '#007fff' },
 ];
 
+// Mapping of fissure types to their tier numbers and colors
 export const fissureTypeList = [
   { name: 'lith', tierNum: 1, color: '#6d490b' },
   { name: 'meso', tierNum: 2, color: '#976b20' },
@@ -23,12 +26,14 @@ export const fissureTypeList = [
   { name: 'omnia', tierNum: 6, color: '#e2caa0' },
 ];
 
+// Mapping of nightwave challenge types
 export const nightwaveChallengeType = {
   DAILY: { name: 'Daily', tier: 0, value: 1000 },
   WEEKLY: { name: 'Weekly', tier: 1, value: 4500 },
   ELITE : { name: 'Elite Weekly', tier: 2, value: 7000 },
 };
 
+// Mapping of polarity keys to their symbols and names
 export const polarities = {
   madurai: { symbol: ':regional_indicator_v:', name: 'Madurai' },
   naramon: { symbol: ':heavy_minus_sign:', name: 'Naramon' },
@@ -40,6 +45,7 @@ export const polarities = {
   omnia: { symbol: ':regional_indicator_o:', name: 'Omnia' },
 };
 
+// Mapping of damage types to their display names and icons
 export const damageTypeList = {
   impact: { name: 'Impact', icon: ':hammer:' },
   puncture: { name: 'Puncture', icon: ':pushpin:' },
@@ -67,12 +73,14 @@ export const damageTypeList = {
   finisher: { name: 'True', icon: ':x_ray:' },
 };
 
+// List of high-priority rewards to highlight in sorties and daily deals
 export const priorityRewardList = [
   'forma',
   'adapter',
   'glyph',
 ];
 
+// Axios instance for Warframe API
 const apiClient = axios.create({
   baseURL: 'https://api.warframestat.us/',
   timeout: 5000,
@@ -85,6 +93,14 @@ const apiClient = axios.create({
   },
 });
 
+/**
+ * Generic function to fetch data from the Warframe API.
+ *
+ * @param {string} endpoint - The API endpoint to fetch data from.
+ * @param {string} context - A brief description of the data being fetched, used for logging.
+ * @param {string} [platform='pc'] - The platform to fetch data for (e.g., 'pc', 'ps4', 'xb1', 'swi').
+ * @returns {Promise<Object|null>} - The fetched data as an object, or null if an error occurred.
+ */
 const fetchData = async (endpoint, context, platform = 'pc') => {
   try {
     logger.debug(`Fetching Warframe ${context}...`);

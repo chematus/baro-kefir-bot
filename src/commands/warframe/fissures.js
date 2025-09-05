@@ -3,6 +3,9 @@ import { getFissuresData, fissureTypeList } from '../../services/warframeAPI.js'
 import { logger } from '../../utils/logger.js';
 import { capitalizeString, DELIMITER, timestampToUnix } from '../../utils/common.js';
 
+/**
+ * Fissures command to retrieve the list of fissures.
+ */
 export default {
   data: {
     name: 'fissures',

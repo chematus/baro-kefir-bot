@@ -3,7 +3,9 @@ import { getNightwaveData, nightwaveChallengeType } from '../../services/warfram
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
-
+/**
+ * Nightwave command to retrieve the list of current nightwave challenges.
+ */
 export default {
   data: {
     name: 'nightwave',

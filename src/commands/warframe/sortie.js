@@ -3,7 +3,9 @@ import { getSortieData } from '../../services/warframeAPI.js';
 import { logger } from '../../utils/logger.js';
 import { DELIMITER, getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
-
+/**
+ * Sortie command to retrieve the list of current sortie missions.
+ */
 export default {
   data: {
     name: 'sortie',

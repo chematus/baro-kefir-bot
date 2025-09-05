@@ -3,6 +3,9 @@ import { logger } from '../../utils/logger.js';
 import { createAlertEmbed } from '../../utils/embed.js';
 import { MessageFlags } from 'discord.js';
 
+/**
+ * Alerts command to retrieve the list of active alerts.
+ */
 export default {
   data: {
     name: 'alerts',

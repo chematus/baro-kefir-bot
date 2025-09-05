@@ -5,6 +5,9 @@ import { getRandomHexColor, timestampToUnix } from '../../utils/common.js';
 
 const THUMBNAIL = 'necraloid.png';
 
+/**
+ * Archimedea command to retrieve the details of archimedea challenges.
+ */
 export default {
   data: {
     name: 'archimedea',

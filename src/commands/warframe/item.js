@@ -13,6 +13,7 @@ const BINARY_ICON = {
   FALSE: ':x:',
 };
 
+//  ---- Helpers ----
 const getDamageTypeString = (key) => damageTypeList[key] ? `${damageTypeList[key].icon} ${damageTypeList[key].name}` : '';
 
 const replacePlaceholders = (str) => str
@@ -33,6 +34,7 @@ const generateDispositionBar = (value) => {
   return dispositionBar.join(' ');
 };
 
+// Parse item info for firearams
 const parseFirearmInfo = ({ attacks, multishot, reloadTime, magazineSize }) => {
   const weaponFields = [];
 
@@ -101,6 +103,7 @@ const parseFirearmInfo = ({ attacks, multishot, reloadTime, magazineSize }) => {
   return embeds;
 };
 
+// Parse item info for melee weapons
 const parseMeleeInfo = (data) => {
   const weaponFields = [
     { name: 'Range', value: `${data.range}m`, inline: true },
@@ -165,6 +168,7 @@ const parseMeleeInfo = (data) => {
   return embeds;
 };
 
+// Parse item info for warframes
 const parseWarframeInfo = (data) => {
   const warframeFields = [
     { name: 'Shields', value: String(data.shield || 0), inline: true },
@@ -196,6 +200,7 @@ const parseWarframeInfo = (data) => {
   return embeds;
 };
 
+// Parse item info for pets
 const parsePetInfo = (data) => {
   const petFields = [
     { name: 'Shields', value: String(data.shield || 0), inline: true },
@@ -209,6 +214,7 @@ const parsePetInfo = (data) => {
     .addFields(...petFields)];
 };
 
+// Parse item info for archwings
 const parseArchwingInfo = (data) => {
   const warframeFields = [
     { name: 'Shields', value: String(data.shield || 0), inline: true },
@@ -234,6 +240,7 @@ const parseArchwingInfo = (data) => {
   return embeds;
 };
 
+// Parse item info for misc items
 const parseMiscInfo = ({ drops }) => {
   const miscFields = drops
     // filter out conclave missions
@@ -255,6 +262,7 @@ const parseMiscInfo = ({ drops }) => {
   return [];
 };
 
+// Parse item info for mods
 const parseModInfo = (data) => {
   const modFields = [
     { name: 'Polarity', value: getPolarityString(data.polarity) },
@@ -276,6 +284,7 @@ const parseModInfo = (data) => {
   return embeds;
 };
 
+// Parse item info for enemies
 const parseEnemyInfo = (data) => {
   const enemyFields = [
     { name: 'Type', value: data.type, inline: true },
@@ -315,6 +324,7 @@ const parseEnemyInfo = (data) => {
   return embeds;
 };
 
+// Mapping item category to its parser function
 const itemTypeMapping = {
   primary: parseFirearmInfo,
   secondary: parseFirearmInfo,
@@ -327,6 +337,9 @@ const itemTypeMapping = {
   enemy: parseEnemyInfo,
 };
 
+/**
+ * Item command to search for an item.
+ */
 export default {
   data: {
     name: 'item',

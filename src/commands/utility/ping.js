@@ -2,6 +2,10 @@ import { MessageFlags } from 'discord.js';
 
 const author = 'chematus';
 
+/**
+ * Ping command to check if the bot is responsive.
+ * If the user is the author, responds with a special message.
+ */
 export default {
   data: {
     name: 'ping',

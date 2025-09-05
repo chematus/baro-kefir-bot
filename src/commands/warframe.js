@@ -14,6 +14,8 @@ import sortie from './warframe/sortie.js';
 import baro from './warframe/baro.js';
 import item from './warframe/item.js';
 
+// Warframe command with subcommands
+
 const subcommandModules = [
   alerts,
   arbitration,
