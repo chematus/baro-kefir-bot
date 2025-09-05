@@ -158,7 +158,7 @@ const checkByType = async (type) => {
 
   let itemList = await FETCHER[type]();
 
-  if (!result) {
+  if (!itemList) {
     return;
   }
 
