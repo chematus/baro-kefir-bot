@@ -128,9 +128,7 @@ export const createVoidTraderEmbed = (voidTraderData) => {
         name: item,
         value: `${ducats} :coin: + ${credits} :euro:`,
       })),
-    )
-    .setTimestamp()
-    .setFooter({ text: 'warframestat.us' }));
+    ));
 
   for (let i = 1; i < inventory.length; i++) {
     embeds.push(new EmbedBuilder()
@@ -140,9 +138,7 @@ export const createVoidTraderEmbed = (voidTraderData) => {
           name: item,
           value: `${ducats} :coin: + ${credits} :euro:`,
         })),
-      )
-      .setTimestamp()
-      .setFooter({ text: 'warframestat.us' }));
+      ));
   }
 
   return embeds;

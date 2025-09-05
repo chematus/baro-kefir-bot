@@ -81,6 +81,10 @@ const FILTER = {
   [NOTIFICATION_TYPE.INVASION]: filterInvasions,
 };
 
+const EMBED_MODIFIER = {
+  [NOTIFICATION_TYPE.BARO]: (embed) => embed[0],
+};
+
 /**
  * Fetches the notification channel and caches it.
  *
@@ -136,7 +140,11 @@ const checkByType = async (type) => {
     return;
   }
 
-  if (Array.isArray(itemList) && FILTER[type]) {
+  if (!Array.isArray(itemList)) {
+    itemList = [itemList];
+  }
+
+  if (FILTER[type]) {
     itemList = itemList.filter(FILTER[type]);
   }
 
@@ -146,7 +154,11 @@ const checkByType = async (type) => {
 
   const postedIds = await getPostedIdsByType(type);
   const itemsToPost = itemList.filter(({ id }) => !postedIds.has(id));
-  const embeds = itemsToPost.map(EMBED_BUILDER[type]);
+  let embeds = itemsToPost.map(EMBED_BUILDER[type]);
+
+  if (EMBED_MODIFIER[type]) {
+    embeds = EMBED_MODIFIER[type](embeds);
+  }
 
   await markItemsAsPosted(itemsToPost.map(({ id }) => id), type);
 
