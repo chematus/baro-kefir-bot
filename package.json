@@ -16,7 +16,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "dotenv -e .env -- vitest"
+    "test": "vitest"
   },
   "dependencies": {
     "@sentry/node": "^10.5.0",
@@ -29,7 +29,6 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.33.0",
-    "dotenv-cli": "^10.0.0",
     "eslint": "^9.33.0",
     "vitest": "^3.2.4"
   }
