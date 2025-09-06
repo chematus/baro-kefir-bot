@@ -22,8 +22,8 @@ Follow these steps to get a local instance of the bot running.
 
 1.  **Clone the repository:**
     ```bash
-    git clone https://github.com/chematus/warframe-bot.git
-    cd warframe-bot
+    git clone https://github.com/chematus/baro-kefir-bot.git
+    cd baro-kefir-bot
     ```
 
 2.  **Install dependencies:**
@@ -59,11 +59,11 @@ Using `pm2` will ensure the bot restarts automatically if it crashes or the host
 npm install pm2 -g
 
 # Start the bot with pm2
-pm2 start index.js --name "warframe-bot"
+pm2 start index.js --name "kefir"
 
 # To monitor logs
-pm2 logs warframe-bot
+pm2 logs kefir
 
 # To stop the bot
-pm2 stop warframe-bot
+pm2 stop kefir
 ```
