@@ -34,6 +34,10 @@ export default {
     });
 
     const embeds = fissureTypeList.map(({ name, tierNum, color }) => {
+      if (!fissureList[tierNum]) {
+        return;
+      }
+
       icons.push(new AttachmentBuilder(
         `./assets/fissures/${name}.png`,
         { name: `fissure-${name}.png` },
@@ -51,7 +55,7 @@ export default {
         )
         .setTimestamp()
         .setFooter({ text: 'warframestat.us' });
-    });
+    }).filter(Boolean);
 
     return interaction.editReply({ embeds, files: icons, flags: MessageFlags.Ephemeral });
   },

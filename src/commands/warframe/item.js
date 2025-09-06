@@ -427,7 +427,7 @@ export default {
       craftFields.push({ name: 'Build time', value: `${formatDuration(itemData.buildTime)}`, inline: true });
     }
 
-    if (itemData.components?.length > 1) {
+    if (itemData.components?.length > 0) {
       craftFields.push({
         name: 'Components',
         value: `${itemData.components.map(({ name, itemCount }) => `${name}: ${itemCount}`).join('\n')}`,
