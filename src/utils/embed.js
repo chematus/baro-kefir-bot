@@ -21,17 +21,30 @@ export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
   .setFooter({ text: 'warframestat.us' });
 
 // Create embed for event data
-export const createEventEmbed = (e) => new EmbedBuilder()
-  .setColor(getRandomHexColor())
-  .setTitle(e.description)
-  .addFields(
-    { name: e.tooltip || '', value: e.node || '' },
-    ...e.interimSteps.map(({ goal, reward: { items } }) => ({ name: `@${goal}`, value: items.join(DELIMITER) })),
-    { name: `@${e.maximumScore}`, value: e.rewards.map(({ items }) => items.join(DELIMITER)).filter((s) => s.length).join('\n') },
-    { name: `Ends <t:${timestampToUnix(e.expiry)}:R>`, value: '' },
-  )
-  .setTimestamp()
-  .setFooter({ text: 'warframestat.us' });
+export const createEventEmbed = (e) => {
+  // Title
+  const fields = [{ name: e.tooltip || '', value: e.node || '' }];
+
+  // Rewards
+  if (e.interimSteps) {
+    e.interimSteps.map(({ goal, reward: { items } }) => fields.push({ name: `@${goal}`, value: items.join(DELIMITER) }));
+  }
+
+  // Final reward
+  if (e.maximumScore) {
+    fields.push({ name: `@${e.maximumScore}`, value: e.rewards.map(({ items }) => items.join(DELIMITER)).filter((s) => s.length).join('\n') });
+  }
+
+  // Expiration date
+  fields.push({ name: `Ends <t:${timestampToUnix(e.expiry)}:R>`, value: '' });
+
+  return new EmbedBuilder()
+    .setColor(getRandomHexColor())
+    .setTitle(e.description)
+    .addFields(...fields)
+    .setTimestamp()
+    .setFooter({ text: 'warframestat.us' });
+};
 
 // Create embed for invasion data
 export const createInvasionEmbed = (inv) => {
