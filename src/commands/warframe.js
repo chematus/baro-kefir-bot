@@ -13,6 +13,7 @@ import nightwave from './warframe/nightwave.js';
 import sortie from './warframe/sortie.js';
 import baro from './warframe/baro.js';
 import item from './warframe/item.js';
+import stream from './warframe/stream.js';
 
 // Warframe command with subcommands
 
@@ -31,6 +32,7 @@ const subcommandModules = [
   news,
   nightwave,
   sortie,
+  stream,
 ];
 
 export default buildSlashCommand('warframe', 'Warframe commands', subcommandModules);

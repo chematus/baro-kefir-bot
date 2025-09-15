@@ -7,6 +7,7 @@ import {
   timestampToUnix,
 } from './common.js';
 import { priorityRewardList } from '../services/warframeAPI.js';
+import { TWITCH_NOTIFICATION_COLOR } from '../services/twitchAPI.js';
 
 // Create embed for alert data
 export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
@@ -161,3 +162,16 @@ export const createVoidTraderEmbed = (voidTraderData) => {
 
   return embeds;
 };
+
+// Create embed for a twitch stream notification
+export const createTwitchStreamEmbed = (data) => [new EmbedBuilder()
+  .setColor(TWITCH_NOTIFICATION_COLOR)
+  .setTitle(data.title)
+  .addFields({
+    name: `Playing: **${data.gameName}**`, value: `<t:${timestampToUnix(data.startDate)}:R>`,
+  })
+  .setURL(`https://twitch.tv/${data.userName}`)
+  .setDescription(`${data.userDisplayName} is now LIVE on Twitch!`)
+  .setImage(data.getThumbnailUrl(400, 225))
+  .setTimestamp()
+  .setFooter({ text: 'twitch.tv' })];

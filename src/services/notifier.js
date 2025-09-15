@@ -14,8 +14,10 @@ import {
   createNewsEmbed,
   createEventEmbed,
   createVoidTraderEmbed,
+  createTwitchStreamEmbed,
 } from '../utils/embed.js';
 import { chunkArray } from '../utils/common.js';
+import { getTwitchStreamData, TWITCH_CHANNEL } from './twitchAPI.js';
 
 const TEN_MINUTES_MS = 10 * 60 * 1000;
 const ONE_HOUR_MS = 60 * 60 * 1000;
@@ -30,6 +32,7 @@ const NOTIFICATION_TYPE = {
   NEWS: 'news',
   EVENT: 'event',
   BARO: 'baro',
+  TWITCH: 'twitch',
 };
 
 // Predefined messages for each notification type
@@ -39,6 +42,7 @@ const NOTIFICATION_MESSAGE = {
   [NOTIFICATION_TYPE.NEWS]: 'Fresh News:',
   [NOTIFICATION_TYPE.EVENT]: 'New Events:',
   [NOTIFICATION_TYPE.BARO]: 'Baro has just arrived!',
+  [NOTIFICATION_TYPE.TWITCH]: 'New stream has just started!',
 };
 
 // Maps notification types to their corresponding data fetching functions
@@ -48,6 +52,7 @@ const FETCHER = {
   [NOTIFICATION_TYPE.NEWS]: getNewsData,
   [NOTIFICATION_TYPE.EVENT]: getEventsData,
   [NOTIFICATION_TYPE.BARO]: getVoidTraderData,
+  [NOTIFICATION_TYPE.TWITCH]: () => getTwitchStreamData(TWITCH_CHANNEL.WARFRAME),
 };
 
 // Maps notification types to their corresponding embed creation functions
@@ -57,6 +62,7 @@ const EMBED_BUILDER = {
   [NOTIFICATION_TYPE.NEWS]: createNewsEmbed,
   [NOTIFICATION_TYPE.EVENT]: createEventEmbed,
   [NOTIFICATION_TYPE.BARO]: createVoidTraderEmbed,
+  [NOTIFICATION_TYPE.TWITCH]: createTwitchStreamEmbed,
 };
 
 /**
@@ -99,6 +105,7 @@ const FILTER = {
 
 const EMBED_MODIFIER = {
   [NOTIFICATION_TYPE.BARO]: (embed) => embed[0],
+  [NOTIFICATION_TYPE.TWITCH]: (embed) => embed[0],
 };
 
 /**
@@ -199,7 +206,6 @@ const checkByType = async (type) => {
   }
 };
 
-
 /**
  * Initializes and starts all the polling mechanisms
  *
@@ -211,6 +217,7 @@ export const startNotifiers = async (client) => {
 
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.ALERT), TEN_MINUTES_MS);
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.INVASION), TEN_MINUTES_MS);
+  setInterval(async () => await checkByType(NOTIFICATION_TYPE.TWITCH), TEN_MINUTES_MS);
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.NEWS), ONE_HOUR_MS);
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.EVENT), ONE_HOUR_MS);
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.BARO), ONE_HOUR_MS);
@@ -220,4 +227,5 @@ export const startNotifiers = async (client) => {
   await checkByType(NOTIFICATION_TYPE.NEWS);
   await checkByType(NOTIFICATION_TYPE.EVENT);
   await checkByType(NOTIFICATION_TYPE.BARO);
+  await checkByType(NOTIFICATION_TYPE.TWITCH);
 };
