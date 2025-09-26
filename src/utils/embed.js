@@ -12,7 +12,7 @@ import { TWITCH_NOTIFICATION_COLOR } from '../services/twitchAPI.js';
 // Create embed for alert data
 export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
   .setColor(getRandomHexColor())
-  .setTitle(m.reward.itemString)
+  .setTitle(m.reward.items.join(DELIMITER))
   .setThumbnail(m.reward.setThumbnail)
   .addFields(
     { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
