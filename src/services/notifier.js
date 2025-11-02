@@ -20,7 +20,7 @@ import { chunkArray } from '../utils/common.js';
 import { getTwitchStreamData, TWITCH_CHANNEL } from './twitchAPI.js';
 
 const TEN_MINUTES_MS = 10 * 60 * 1000;
-const ONE_HOUR_MS = 60 * 60 * 1000;
+// const ONE_HOUR_MS = 60 * 60 * 1000;
 
 let clientInstance = null;
 let notificationChannel = null;
@@ -215,17 +215,17 @@ export const startNotifiers = async (client) => {
   clientInstance = client;
   logger.info('Starting background notifiers...');
 
-  setInterval(async () => await checkByType(NOTIFICATION_TYPE.ALERT), TEN_MINUTES_MS);
-  setInterval(async () => await checkByType(NOTIFICATION_TYPE.INVASION), TEN_MINUTES_MS);
+  // setInterval(async () => await checkByType(NOTIFICATION_TYPE.ALERT), TEN_MINUTES_MS);
+  // setInterval(async () => await checkByType(NOTIFICATION_TYPE.INVASION), TEN_MINUTES_MS);
   setInterval(async () => await checkByType(NOTIFICATION_TYPE.TWITCH), TEN_MINUTES_MS);
-  setInterval(async () => await checkByType(NOTIFICATION_TYPE.NEWS), ONE_HOUR_MS);
-  setInterval(async () => await checkByType(NOTIFICATION_TYPE.EVENT), ONE_HOUR_MS);
-  setInterval(async () => await checkByType(NOTIFICATION_TYPE.BARO), ONE_HOUR_MS);
+  // setInterval(async () => await checkByType(NOTIFICATION_TYPE.NEWS), ONE_HOUR_MS);
+  // setInterval(async () => await checkByType(NOTIFICATION_TYPE.EVENT), ONE_HOUR_MS);
+  // setInterval(async () => await checkByType(NOTIFICATION_TYPE.BARO), ONE_HOUR_MS);
 
-  await checkByType(NOTIFICATION_TYPE.ALERT);
-  await checkByType(NOTIFICATION_TYPE.INVASION);
-  await checkByType(NOTIFICATION_TYPE.NEWS);
-  await checkByType(NOTIFICATION_TYPE.EVENT);
-  await checkByType(NOTIFICATION_TYPE.BARO);
+  // await checkByType(NOTIFICATION_TYPE.ALERT);
+  // await checkByType(NOTIFICATION_TYPE.INVASION);
+  // await checkByType(NOTIFICATION_TYPE.NEWS);
+  // await checkByType(NOTIFICATION_TYPE.EVENT);
+  // await checkByType(NOTIFICATION_TYPE.BARO);
   await checkByType(NOTIFICATION_TYPE.TWITCH);
 };
