@@ -40,7 +40,7 @@ export const isItemPosted = (id, type) => {
  *
  * @param {string} type - The category of items to fetch.
  *
- * @returns {Set<string>|null} - A Set containing all the posted IDs for that type, or null on failure.
+ * @returns {Set<string>} - A Set containing all the posted IDs for that type, or an empty Set on failure.
  */
 export const getPostedIdsByType = (type) => {
   const stmt = db.prepare('SELECT id FROM posted_items WHERE type = ?');
@@ -49,9 +49,9 @@ export const getPostedIdsByType = (type) => {
 
     return new Set(rows.map(row => row.id));
   } catch (error) {
-    reportError(error, { context: 'database.markItemsAsPosted' });
+    reportError(error, { context: 'database.getPostedIdsByType' });
 
-    return null;
+    return new Set();
   }
 };
 

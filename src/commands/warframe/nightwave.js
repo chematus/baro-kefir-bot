@@ -30,44 +30,42 @@ export default {
       .addFields({ name: `Ends <t:${timestampToUnix(nightwaveData.expiry)}:R>`, value: '' })
       .setFooter({ text: 'warframestat.us' })];
 
-    const challengeList = {};
+    const challengeList = Object.fromEntries(
+      Object.values(nightwaveChallengeType).map(({ tier }) => [tier, []]),
+    );
 
-    nightwaveData.activeChallenges.forEach((challenge) => {
+    nightwaveData.activeChallenges?.forEach((challenge) => {
       if (challenge.isDaily) {
         const tier = nightwaveChallengeType.DAILY.tier;
-
-        if (!challengeList[tier]) {
-          challengeList[tier] = [];
-        }
 
         challengeList[tier].push(challenge);
       } else if (challenge.isElite) {
         const tier = nightwaveChallengeType.ELITE.tier;
 
-        if (!challengeList[tier]) {
-          challengeList[tier] = [];
-        }
-
         challengeList[tier].push(challenge);
       } else {
         const tier = nightwaveChallengeType.WEEKLY.tier;
-
-        if (!challengeList[tier]) {
-          challengeList[tier] = [];
-        }
 
         challengeList[tier].push(challenge);
       }
     });
 
-    Object.values(nightwaveChallengeType).forEach((challenge) => embeds.push(new EmbedBuilder()
-      .setColor(getRandomHexColor())
-      .setTitle(`${challenge.name}${DELIMITER}${challenge.value}`)
-      .setTimestamp()
-      .addFields(
-        ...challengeList[challenge.tier].map((c) => ({ name: c.title, value: c.desc })),
-        { name: `Ends <t:${timestampToUnix(challengeList[challenge.tier][0].expiry)}:R>`, value: '' })
-      .setFooter({ text: 'warframestat.us' })));
+    Object.values(nightwaveChallengeType).forEach((challenge) => {
+      const challenges = challengeList[challenge.tier];
+
+      if (!challenges.length) {
+        return;
+      }
+
+      embeds.push(new EmbedBuilder()
+        .setColor(getRandomHexColor())
+        .setTitle(`${challenge.name}${DELIMITER}${challenge.value}`)
+        .setTimestamp()
+        .addFields(
+          ...challenges.map((c) => ({ name: c.title, value: c.desc })),
+          { name: `Ends <t:${timestampToUnix(challenges[0].expiry)}:R>`, value: '' })
+        .setFooter({ text: 'warframestat.us' }));
+    });
 
     await interaction.editReply({ embeds, flags: MessageFlags.Ephemeral });
   },

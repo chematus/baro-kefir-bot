@@ -394,13 +394,18 @@ export default {
       fields.push({ name: 'Market Cost', value: `${itemData.marketCost}pl` });
     }
 
-    let embeds = [new EmbedBuilder()
+    const mainEmbed = new EmbedBuilder()
       .setColor(getRandomHexColor())
       .setTitle(itemData.name)
       .setImage(itemData.wikiaThumbnail)
-      .addFields(...fields)
       .setTimestamp()
-      .setFooter({ text: 'warframestat.us' })];
+      .setFooter({ text: 'warframestat.us' });
+
+    if (fields.length) {
+      mainEmbed.addFields(...fields);
+    }
+
+    let embeds = [mainEmbed];
 
     if (itemData.description) {
       embeds[0].setDescription(itemData.description);
@@ -410,7 +415,11 @@ export default {
     }
 
     // Specific item data
-    embeds = embeds.concat(itemTypeMapping[itemData.category.toLowerCase()](itemData));
+    const itemParser = itemTypeMapping[itemData.category?.toLowerCase()];
+
+    if (itemParser) {
+      embeds = embeds.concat(itemParser(itemData));
+    }
 
     // Crafting
     const craftFields = [];

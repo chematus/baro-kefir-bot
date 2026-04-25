@@ -187,23 +187,30 @@ const checkByType = async (type) => {
 
   const postedIds = await getPostedIdsByType(type);
   const itemsToPost = itemList.filter(({ id }) => !postedIds.has(id));
+
+  if (!itemsToPost.length) {
+    return;
+  }
+
   let embeds = itemsToPost.map(EMBED_BUILDER[type]);
 
   if (EMBED_MODIFIER[type]) {
     embeds = EMBED_MODIFIER[type](embeds);
   }
 
-  await markItemsAsPosted(itemsToPost.map(({ id }) => id), type);
-
-  if (embeds?.length) {
-    await channel.send(NOTIFICATION_MESSAGE[type]);
-
-    const embedChunks = chunkArray(embeds);
-
-    for (let i = 0; i < embedChunks.length; i++) {
-      await channel.send({ embeds: embedChunks[i] });
-    }
+  if (!embeds?.length) {
+    return;
   }
+
+  await channel.send(NOTIFICATION_MESSAGE[type]);
+
+  const embedChunks = chunkArray(embeds);
+
+  for (let i = 0; i < embedChunks.length; i++) {
+    await channel.send({ embeds: embedChunks[i] });
+  }
+
+  await markItemsAsPosted(itemsToPost.map(({ id }) => id), type);
 };
 
 /**

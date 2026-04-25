@@ -85,6 +85,32 @@ describe('/warframe nightwave command', () => {
     );
   });
 
+  it('should skip empty challenge groups', async () => {
+    // --- Arrange ---
+    const mockNightwaveData = {
+      season: 5,
+      tag: 'Nora\'s Mix Vol. 5',
+      expiry: '2025-10-10T00:00:00.000Z',
+      activeChallenges: [
+        { title: 'Daily Task', desc: 'Do a thing.', isDaily: true, expiry: '2025-09-06T00:00:00Z' },
+      ],
+    };
+    warframeAPI.getNightwaveData.mockResolvedValue(mockNightwaveData);
+
+    // --- Act ---
+    await nightwaveCommand.execute(mockInteraction);
+
+    // --- Assert ---
+    expect(mockInteraction.editReply).toHaveBeenCalledOnce();
+    const replyArgs = mockInteraction.editReply.mock.calls[0][0];
+
+    // 1 main embed + 1 populated category
+    expect(EmbedBuilder).toHaveBeenCalledTimes(2);
+    expect(replyArgs.embeds).toHaveLength(2);
+    expect(mockEmbed.setTitle).toHaveBeenCalledWith(expect.stringContaining('Daily'));
+    expect(mockEmbed.setTitle).not.toHaveBeenCalledWith(expect.stringContaining('Elite Weekly'));
+  });
+
 
   it('should handle API errors gracefully', async () => {
     // --- Arrange ---

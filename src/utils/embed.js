@@ -19,16 +19,23 @@ const formatRewardTitle = ({ items = [], countedItems = [] }) => {
 };
 
 // Create embed for alert data
-export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
-  .setColor(getRandomHexColor())
-  .setTitle(formatRewardTitle(m.reward))
-  .setThumbnail(m.reward.setThumbnail)
-  .addFields(
-    { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
-    { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
-  )
-  .setTimestamp()
-  .setFooter({ text: 'warframestat.us' });
+export const createAlertEmbed = ({ expiry, mission: m }) => {
+  const embed = new EmbedBuilder()
+    .setColor(getRandomHexColor())
+    .setTitle(formatRewardTitle(m.reward))
+    .addFields(
+      { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
+      { name: `Ends <t:${timestampToUnix(expiry)}:R>`, value: '' },
+    )
+    .setTimestamp()
+    .setFooter({ text: 'warframestat.us' });
+
+  if (m.reward?.thumbnail) {
+    embed.setThumbnail(m.reward.thumbnail);
+  }
+
+  return embed;
+};
 
 // Create embed for event data
 export const createEventEmbed = (e) => {
@@ -147,6 +154,10 @@ export const createVoidTraderEmbed = (voidTraderData) => {
     .setFooter({ text: 'warframestat.us' })];
 
   const inventory = chunkArray(voidTraderData.inventory);
+
+  if (!inventory.length) {
+    return embeds;
+  }
 
   embeds.push(new EmbedBuilder()
     .setColor(getRandomHexColor())

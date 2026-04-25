@@ -156,7 +156,7 @@ describe('/warframe item command', () => {
     );
   });
 
-  it('should handle items with unknown categories', async () => {
+  it('should display general info for items with unknown categories', async () => {
     // --- Arrange ---
     mockInteraction.options.getString.mockReturnValue('Some Item');
     const mockUnknownData = {
@@ -166,10 +166,14 @@ describe('/warframe item command', () => {
     };
     warframeAPI.getItemData.mockResolvedValue(mockUnknownData);
 
-    // --- Act & Assert ---
-    // The parser for 'fish' doesn't exist, so it should throw an error
-    await expect(itemCommand.execute(mockInteraction))
-      .rejects.toThrow(TypeError);
+    // --- Act ---
+    await itemCommand.execute(mockInteraction);
+
+    // --- Assert ---
+    expect(mockInteraction.editReply).toHaveBeenCalledOnce();
+    const replyArgs = mockInteraction.editReply.mock.calls[0][0];
+    expect(replyArgs.embeds).toHaveLength(1);
+    expect(replyArgs.embeds[0].setTitle).toHaveBeenCalledWith('Some Item');
   });
 
   it('should handle "item not found" gracefully', async () => {
