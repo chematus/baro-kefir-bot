@@ -93,6 +93,14 @@ const apiClient = axios.create({
   },
 });
 
+// Warframe's API can intermittently return 404s for valid resources, so report only sustained 404 streaks.
+const CONSECUTIVE_404_REPORT_THRESHOLD = 3;
+const consecutive404Counts = new Map();
+
+const getFetchKey = (endpoint, platform) => `${platform || 'global'}/${endpoint}`;
+
+const isNotFoundError = (error) => error?.response?.status === 404;
+
 /**
  * Generic function to fetch data from the Warframe API.
  *
@@ -102,12 +110,29 @@ const apiClient = axios.create({
  * @returns {Promise<Object|null>} - The fetched data as an object, or null if an error occurred.
  */
 const fetchData = async (endpoint, context, platform = 'pc') => {
+  const fetchKey = getFetchKey(endpoint, platform);
+
   try {
     logger.debug(`Fetching Warframe ${context}...`);
     const response = await apiClient.get(`${platform ? `${platform}/` : ''}${endpoint}`);
 
+    consecutive404Counts.delete(fetchKey);
+
     return response.data;
   } catch (error) {
+    if (isNotFoundError(error)) {
+      const failureCount = (consecutive404Counts.get(fetchKey) || 0) + 1;
+      consecutive404Counts.set(fetchKey, failureCount);
+
+      if (failureCount !== CONSECUTIVE_404_REPORT_THRESHOLD) {
+        logger.debug(
+          `Suppressed Warframe 404 for ${context} (${failureCount} consecutive, reporting after ${CONSECUTIVE_404_REPORT_THRESHOLD})`,
+        );
+
+        return null;
+      }
+    }
+
     reportError(error, { context: `warframeAPI ${context}` });
 
     return null;
