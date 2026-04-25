@@ -9,10 +9,19 @@ import {
 import { priorityRewardList } from '../services/warframeAPI.js';
 import { TWITCH_NOTIFICATION_COLOR } from '../services/twitchAPI.js';
 
+// Formats alert rewards for embed titles, falling back to counted items when the API sends no plain item names.
+const formatRewardTitle = ({ items = [], countedItems = [] }) => {
+  const rewardItems = items.length
+    ? items
+    : countedItems.map(({ count, type }) => (count > 1 ? `${type} (${count})` : type));
+
+  return rewardItems.join(DELIMITER);
+};
+
 // Create embed for alert data
 export const createAlertEmbed = ({ expiry, mission: m }) => new EmbedBuilder()
   .setColor(getRandomHexColor())
-  .setTitle(m.reward.items.join(DELIMITER))
+  .setTitle(formatRewardTitle(m.reward))
   .setThumbnail(m.reward.setThumbnail)
   .addFields(
     { name: `${m.node}${DELIMITER}${m.type}`, value: `${m.faction} (${m.minEnemyLevel}-${m.maxEnemyLevel})` },
@@ -32,7 +41,7 @@ export const createEventEmbed = (e) => {
   }
 
   // Final reward
-  if (e.maximumScore) {
+  if (e.maximumScore && e.maximumScore > 1) {
     fields.push({ name: `@${e.maximumScore}`, value: e.rewards.map(({ items }) => items.join(DELIMITER)).filter((s) => s.length).join('\n') });
   }
 
