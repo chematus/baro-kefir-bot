@@ -202,12 +202,16 @@ const checkByType = async (type) => {
     return;
   }
 
-  await channel.send(NOTIFICATION_MESSAGE[type]);
-
   const embedChunks = chunkArray(embeds);
 
   for (let i = 0; i < embedChunks.length; i++) {
-    await channel.send({ embeds: embedChunks[i] });
+    const payload = { embeds: embedChunks[i] };
+
+    if (i === 0) {
+      payload.content = NOTIFICATION_MESSAGE[type];
+    }
+
+    await channel.send(payload);
   }
 
   await markItemsAsPosted(itemsToPost.map(({ id }) => id), type);
