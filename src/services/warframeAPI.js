@@ -80,6 +80,11 @@ export const priorityRewardList = [
   'glyph',
 ];
 
+// List of alert reward item names to ignore in notifications
+export const alertItemBlacklist = [
+  'volatile motes',
+];
+
 // Axios instance for Warframe API
 const apiClient = axios.create({
   baseURL: 'https://api.warframestat.us/',

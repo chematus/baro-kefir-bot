@@ -31,6 +31,9 @@ describe('notifier service', () => {
       getEventsData: vi.fn().mockResolvedValue([]),
       getVoidTraderData: vi.fn().mockResolvedValue({ id: 'baro', inventory: [] }),
       priorityRewardList: [],
+      alertItemBlacklist: [
+        'volatile motes',
+      ],
     }));
 
     vi.doMock('../../src/services/database.js', () => ({
@@ -98,5 +101,51 @@ describe('notifier service', () => {
     });
     expect(database.markItemsAsPosted).toHaveBeenCalledWith(['news-1'], 'news');
     expect(database.markItemsAsPosted).toHaveBeenCalledWith(['event-1'], 'event');
+  });
+
+  it('does not send alert notifications for blacklisted item names regardless of case', async () => {
+    const allowedAlert = {
+      id: 'allowed-alert',
+      expired: false,
+      mission: {
+        reward: {
+          items: ['Forma'],
+        },
+      },
+    };
+    const blacklistedAlert = {
+      id: 'blacklisted-alert',
+      expired: false,
+      mission: {
+        reward: {
+          items: ['Volatile Motes'],
+        },
+      },
+    };
+    const countedBlacklistedAlert = {
+      id: 'counted-blacklisted-alert',
+      expired: false,
+      mission: {
+        reward: {
+          countedItems: [{ type: 'Volatile Motes', count: 1 }],
+        },
+      },
+    };
+
+    warframeAPI.getAlertsData.mockResolvedValue([
+      allowedAlert,
+      blacklistedAlert,
+      countedBlacklistedAlert,
+    ]);
+
+    await notifier.startNotifiers(client);
+
+    expect(embedUtils.createAlertEmbed).toHaveBeenCalledTimes(1);
+    expect(embedUtils.createAlertEmbed).toHaveBeenCalledWith(allowedAlert, 0, [allowedAlert]);
+    expect(channel.send).toHaveBeenCalledWith({
+      content: 'New Alerts:',
+      embeds: [{ title: 'alert allowed-alert' }],
+    });
+    expect(database.markItemsAsPosted).toHaveBeenCalledWith(['allowed-alert'], 'alert');
   });
 });

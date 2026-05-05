@@ -5,6 +5,7 @@ import {
   getEventsData,
   getVoidTraderData,
   priorityRewardList,
+  alertItemBlacklist,
 } from './warframeAPI.js';
 import { getPostedIdsByType, markItemsAsPosted } from './database.js';
 import { logger } from '../utils/logger.js';
@@ -66,12 +67,34 @@ const EMBED_BUILDER = {
 };
 
 /**
- * Filters alerts based on their expiration status.
+ * Gets item names from an alert reward.
+ *
+ * @param {Object} reward - The alert reward.
+ * @returns {string[]} - Reward item names.
+ */
+const getAlertRewardItemNames = ({ items = [], countedItems = [] } = {}) => [
+  ...items,
+  ...countedItems.map(({ type }) => type),
+].filter(Boolean);
+
+/**
+ * Filters alerts based on their expiration status and reward blacklist.
  *
  * @param {Object} data - The alert data.
  * @returns {boolean} - True if the alert matches the filter, false otherwise.
  */
-const filterAlerts = ({ expired }) => !expired;
+const filterAlerts = ({ expired, mission }) => {
+  if (expired) {
+    return false;
+  }
+
+  if (!alertItemBlacklist.length) {
+    return true;
+  }
+
+  return !getAlertRewardItemNames(mission?.reward)
+    .some((itemName) => alertItemBlacklist.includes(itemName.toLowerCase()));
+};
 
 /**
  * Filters invasions based on their rewards.
